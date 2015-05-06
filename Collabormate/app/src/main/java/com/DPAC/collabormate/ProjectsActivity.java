@@ -23,7 +23,7 @@ import java.util.List;
 
 
 public class ProjectsActivity extends ListActivity {
-    private CommentsDataSource datasource;
+    private ProjectsDataSource datasource;
     private String projectName = "";
 
     @Override
@@ -31,14 +31,14 @@ public class ProjectsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects);
 
-        datasource = new CommentsDataSource(this);
+        datasource = new ProjectsDataSource(this);
         datasource.open();
 
-        List<Comment> values = datasource.getAllComments();
+        List<Project> values = datasource.getAllProjects();
 
         // use the SimpleCursorAdapter to show the
         // elements in a ListView
-        ArrayAdapter<Comment> adapter = new ArrayAdapter<Comment>(this,
+        ArrayAdapter<Project> adapter = new ArrayAdapter<Project>(this,
                 android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
 
@@ -90,12 +90,12 @@ public class ProjectsActivity extends ListActivity {
     // of the buttons in projects.xml
     public void deleteProject(View view) {
         @SuppressWarnings("unchecked")
-        ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) getListAdapter();
-        Comment comment = null;
+        ArrayAdapter<Project> adapter = (ArrayAdapter<Project>) getListAdapter();
+        Project project = null;
         if (getListAdapter().getCount() > 0) {
-            comment = (Comment) getListAdapter().getItem(0);
-            datasource.deleteComment(comment);
-            adapter.remove(comment);
+            project = (Project) getListAdapter().getItem(0);
+            datasource.deleteProject(project);
+            adapter.remove(project);
         }
         adapter.notifyDataSetChanged();
     }
@@ -116,10 +116,10 @@ public class ProjectsActivity extends ListActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 projectName = input.getText().toString();
-                ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) getListAdapter();
-                Comment comment = null;
-                comment = datasource.createComment(projectName);
-                adapter.add(comment);
+                ArrayAdapter<Project> adapter = (ArrayAdapter<Project>) getListAdapter();
+                Project project = null;
+                project = datasource.createProject(projectName);
+                adapter.add(project);
                 adapter.notifyDataSetChanged();
             }
         });

@@ -2,7 +2,7 @@ package com.DPAC.collabormate;
 
 public class Project {
     private long id;
-    private String comment;
+    private String project;
 
     public long getId() {
         return id;
@@ -12,17 +12,17 @@ public class Project {
         this.id = id;
     }
 
-    public String getComment() {
-        return comment;
+    public String getProject() {
+        return project;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setProject(String project) {
+        this.project = project;
     }
 
     // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
-        return comment;
+        return project;
     }
 }

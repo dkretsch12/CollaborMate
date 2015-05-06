@@ -1,6 +1,6 @@
 package com.DPAC.collabormate;
 
-public class Project {
+public class Comment {
     private long id;
     private String comment;
 

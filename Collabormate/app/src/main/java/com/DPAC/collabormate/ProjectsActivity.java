@@ -1,6 +1,7 @@
 package com.DPAC.collabormate;
 
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -21,26 +22,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProjectsActivity extends ActionBarActivity {
-    private List<Project> courses = new ArrayList<Project>();
+public class ProjectsActivity extends ListActivity {
+    private CommentsDataSource datasource;
     private String projectName = "";
-    private int count = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects);
 
-        ListView listView1 = (ListView) findViewById(R.id.projects);
+        datasource = new CommentsDataSource(this);
+        datasource.open();
 
-        ArrayAdapter<Project> adapter = new ArrayAdapter<Project>(this,
-                android.R.layout.simple_list_item_1, courses);
+        List<Comment> values = datasource.getAllComments();
 
-        listView1.setAdapter(adapter);
-        listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // use the SimpleCursorAdapter to show the
+        // elements in a ListView
+        ArrayAdapter<Comment> adapter = new ArrayAdapter<Comment>(this,
+                android.R.layout.simple_list_item_1, values);
+        setListAdapter(adapter);
+
+        ListView lv = (ListView)findViewById(android.R.id.list);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                startActivity(new Intent(ProjectsActivity.this, CalendarActivity.class));
+                Intent intent = new Intent(ProjectsActivity.this, CalendarActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -73,38 +82,68 @@ public class ProjectsActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-        if (id == R.id.action_project) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("New Project Name:");
-
-            // Set up the input
-            final EditText input = new EditText(this);
-            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
-            builder.setView(input);
-
-            // Add new course
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    projectName = input.getText().toString();
-                    Project newCourse = new Project(count, projectName);
-                    count = count + 1;
-                    courses.add(newCourse);
-                }
-            });
-            //Cancel
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            builder.show();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
+
+    // Will be called via the onClick attribute
+    // of the buttons in projects.xml
+    public void deleteProject(View view) {
+        @SuppressWarnings("unchecked")
+        ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) getListAdapter();
+        Comment comment = null;
+        if (getListAdapter().getCount() > 0) {
+            comment = (Comment) getListAdapter().getItem(0);
+            datasource.deleteComment(comment);
+            adapter.remove(comment);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void newProject(View view){
+        @SuppressWarnings("unchecked")
+        final AlertDialog.Builder[] builder = {new AlertDialog.Builder(this)};
+        builder[0].setTitle("New Project Name:");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder[0].setView(input);
+
+        // Add new course
+        builder[0].setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                projectName = input.getText().toString();
+                ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) getListAdapter();
+                Comment comment = null;
+                comment = datasource.createComment(projectName);
+                adapter.add(comment);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        //Cancel
+        builder[0].setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder[0].show();
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
+    }
+
 }

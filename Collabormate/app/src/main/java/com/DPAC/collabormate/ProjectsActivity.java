@@ -2,6 +2,7 @@ package com.DPAC.collabormate;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -25,7 +26,6 @@ import java.util.List;
 public class ProjectsActivity extends ListActivity {
     private ProjectsDataSource datasource;
     private String projectName = "";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +61,9 @@ public class ProjectsActivity extends ListActivity {
         getMenuInflater().inflate(R.menu.menu_projects, menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_projects, menu);
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -78,8 +81,9 @@ public class ProjectsActivity extends ListActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.settings) {
+            startActivity(new Intent(this, Preferences.class));
+
             return true;
         }
 
@@ -145,5 +149,4 @@ public class ProjectsActivity extends ListActivity {
         datasource.close();
         super.onPause();
     }
-
 }

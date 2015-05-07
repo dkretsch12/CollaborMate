@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,12 +26,19 @@
 
         <activity
             android:name=".ProjectsActivity"
-            android:label="@string/title_activity_projects" >
+            android:label="@string/title_activity_projects"
+            android:theme="@android:style/Theme.Holo">
         </activity>
 
         <activity
             android:name=".CalendarActivity"
-            android:label="@string/title_activity_calendar" >
+            android:label="@string/title_activity_calendar"
+            android:theme="@android:style/Theme.Holo">
+        </activity>
+
+        <activity
+            android:name="Preferences"
+            android:theme="@android:style/Theme.Holo">
         </activity>
 
     </application>

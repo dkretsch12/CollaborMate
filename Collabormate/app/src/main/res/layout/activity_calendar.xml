@@ -5,14 +5,8 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ADD TASK"/>
-
     <CalendarView
-        android:id="@+id/calendarView"
+        android:id="@+id/calendarView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"

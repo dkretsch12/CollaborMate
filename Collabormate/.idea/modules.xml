@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Collabormate.iml" filepath="$PROJECT_DIR$/Collabormate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Collabormate-Hoang.iml" filepath="$PROJECT_DIR$/Collabormate-Hoang.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
